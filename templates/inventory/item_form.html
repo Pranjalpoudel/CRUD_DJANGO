@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {% if object %}Edit Item{% else %}Add New Item{% endif %} | Smart Inventory
+{% endblock %}
+
+{% block content %}
+<div class="form-container" style="max-width: 600px; margin: 0 auto;">
+    <div class="glass-panel" style="padding: 2.5rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.8rem; color: #0f172a;">
+                {% if object %}Edit {{ object.name }}{% else %}Add New Item{% endif %}
+            </h2>
+            <a href="{% url 'item_list' %}" class="btn btn-secondary" style="padding: 0.4rem 0.8rem;">
+                <i data-lucide="x" style="width: 18px; margin-right: -0.25rem;"></i> Cancel
+            </a>
+        </div>
+        
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0 1.5rem;">
+                <div class="form-group" style="grid-column: span 2;">
+                    <label for="{{ form.name.id_for_label }}">Item Name</label>
+                    <input type="text" name="name" id="name" value="{{ form.name.value|default:'' }}" required>
+                    {% if form.name.errors %}<p style="color: var(--status-maint); font-size: 0.85rem; margin-top: 0.25rem;">{{ form.name.errors.0 }}</p>{% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.category.id_for_label }}">Category</label>
+                    <select name="category" id="category" required>
+                        {% for choice in form.category.field.queryset %}
+                        <option value="{{ choice.pk }}" {% if form.category.value|stringformat:"s" == choice.pk|stringformat:"s" %}selected{% endif %}>{{ choice.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.status.id_for_label }}">Status</label>
+                    <select name="status" id="status">
+                        {% for val, label in form.status.field.choices %}
+                        <option value="{{ val }}" {% if form.status.value == val %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.price.id_for_label }}">Estimated Value ($)</label>
+                    <input type="number" step="0.01" name="price" id="price" value="{{ form.price.value|default:'0.00' }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.purchase_date.id_for_label }}">Purchase Date</label>
+                    <input type="date" name="purchase_date" id="purchase_date" value="{{ form.purchase_date.value|date:'Y-m-d'|default:'' }}">
+                </div>
+
+                <div class="form-group" style="grid-column: span 2;">
+                    <label for="{{ form.serial_number.id_for_label }}">Serial Number / Identifier</label>
+                    <input type="text" name="serial_number" id="serial_number" value="{{ form.serial_number.value|default:'' }}">
+                </div>
+
+                <div class="form-group" style="grid-column: span 2;">
+                    <label for="{{ form.image.id_for_label }}">Item Image</label>
+                    <input type="file" name="image" id="image" accept="image/*" style="padding: 0.5rem; background: transparent; border: 1px dashed #cbd5e1;">
+                    {% if object.image %}
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">Current file: {{ object.image.name }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="form-group" style="grid-column: span 2;">
+                    <label for="{{ form.description.id_for_label }}">Description & Notes</label>
+                    <textarea name="description" id="description" rows="4">{{ form.description.value|default:'' }}</textarea>
+                </div>
+            </div>
+
+            <div style="margin-top: 2rem; display: flex; justify-content: flex-end;">
+                <button type="submit" class="btn btn-primary" style="padding: 0.75rem 2rem; font-size: 1.05rem;">
+                    <i data-lucide="save"></i> Save Item
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

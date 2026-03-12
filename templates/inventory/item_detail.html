@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="detail-container glass-panel" style="padding: 2.5rem; max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;">
+    
+    <div class="item-images">
+        <div class="main-image glass-panel" style="height: 400px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #f8fafc;">
+            {% if item.image %}
+            <img src="{{ item.image.url }}" alt="{{ item.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+            {% else %}
+            <i data-lucide="image" style="width: 80px; height: 80px; color: var(--text-muted); opacity: 0.3;"></i>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="item-info">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+            <p style="color: var(--primary); font-weight: 600; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em;">
+                {% if item.category.icon %}{{ item.category.icon }} {% endif %}{{ item.category.name }}
+            </p>
+            <span class="badge badge-{{ item.status }}">{{ item.get_status_display }}</span>
+        </div>
+        
+        <h1 style="font-size: 2.5rem; line-height: 1.2; margin-bottom: 1rem; color: #0f172a;">{{ item.name }}</h1>
+        <p style="font-size: 2rem; font-weight: 700; color: var(--text-main); margin-bottom: 2rem;">${{ item.price }}</p>
+        
+        <div class="meta-section" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2.5rem; padding: 1.5rem; background: rgba(241, 245, 249, 0.5); border-radius: 12px;">
+            <div>
+                <p style="color: var(--text-muted); font-size: 0.85rem; font-weight: 500; margin-bottom: 0.25rem;">Serial Number</p>
+                <p style="font-weight: 600;">{{ item.serial_number|default:"N/A" }}</p>
+            </div>
+            <div>
+                <p style="color: var(--text-muted); font-size: 0.85rem; font-weight: 500; margin-bottom: 0.25rem;">Purchase Date</p>
+                <p style="font-weight: 600;">{{ item.purchase_date|date:"F j, Y"|default:"Unknown" }}</p>
+            </div>
+            <div>
+                <p style="color: var(--text-muted); font-size: 0.85rem; font-weight: 500; margin-bottom: 0.25rem;">Added On</p>
+                <p style="font-weight: 600;">{{ item.created_at|date:"M j, Y" }}</p>
+            </div>
+            <div>
+                <p style="color: var(--text-muted); font-size: 0.85rem; font-weight: 500; margin-bottom: 0.25rem;">Last Updated</p>
+                <p style="font-weight: 600;">{{ item.updated_at|date:"M j, Y" }}</p>
+            </div>
+        </div>
+        
+        <div class="description-section" style="margin-bottom: 3rem;">
+            <h3 style="font-size: 1.1rem; margin-bottom: 1rem; color: var(--text-main);">Description</h3>
+            <p style="color: var(--text-muted); line-height: 1.6;">
+                {{ item.description|default:"No description provided for this item."|linebreaksbr }}
+            </p>
+        </div>
+        
+        <div class="actions" style="display: flex; gap: 1rem;">
+            <a href="{% url 'item_update' item.pk %}" class="btn btn-primary" style="flex: 1; justify-content: center;">
+                <i data-lucide="edit-2" style="width: 18px;"></i> Edit Item
+            </a>
+            <a href="{% url 'item_delete' item.pk %}" class="btn btn-danger">
+                <i data-lucide="trash-2" style="width: 18px;"></i> Delete
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

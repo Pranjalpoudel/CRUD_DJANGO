@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirm Delete | Smart Inventory{% endblock %}
+
+{% block content %}
+<div class="form-container" style="max-width: 500px; margin: 4rem auto 0;">
+    <div class="glass-panel" style="padding: 3rem; text-align: center;">
+        <div style="color: var(--status-maint); margin-bottom: 1.5rem;">
+            <i data-lucide="alert-triangle" style="width: 64px; height: 64px; margin: 0 auto;"></i>
+        </div>
+        
+        <h2 style="font-size: 1.8rem; color: #0f172a; margin-bottom: 1rem;">Delete Item</h2>
+        
+        <p style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.6; margin-bottom: 2rem;">
+            Are you sure you want to permanently delete<br>
+            <strong style="color: var(--text-main);">"{{ object.name }}"</strong>?<br>
+            <span style="font-size: 0.9rem; margin-top: 0.5rem; display: block;">This action cannot be undone.</span>
+        </p>
+        
+        <form method="post" style="display: flex; gap: 1rem; justify-content: center;">
+            {% csrf_token %}
+            <a href="{% url 'item_detail' object.pk %}" class="btn btn-secondary" style="padding: 0.75rem 2rem; font-size: 1.05rem;">
+                Cancel
+            </a>
+            <button type="submit" class="btn btn-danger" style="padding: 0.75rem 2rem; font-size: 1.05rem;">
+                <i data-lucide="trash-2"></i> Yes, Delete
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

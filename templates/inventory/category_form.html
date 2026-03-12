@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Category | Smart Inventory{% endblock %}
+
+{% block content %}
+<div class="form-container" style="max-width: 500px; margin: 0 auto; margin-top: 2rem;">
+    <div class="glass-panel" style="padding: 2.5rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.8rem; color: #0f172a;">New Category</h2>
+            <a href="{% url 'item_list' %}" class="btn btn-secondary" style="padding: 0.4rem 0.8rem;">
+                <i data-lucide="x" style="width: 18px; margin-right: -0.25rem;"></i> Cancel
+            </a>
+        </div>
+        
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="{{ form.name.id_for_label }}">Category Name</label>
+                <input type="text" name="name" id="name" value="{{ form.name.value|default:'' }}" required placeholder="e.g. Laptops, Power Tools">
+                {% if form.name.errors %}<p style="color: var(--status-maint); font-size: 0.85rem; margin-top: 0.25rem;">{{ form.name.errors.0 }}</p>{% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.icon.id_for_label }}">Icon (Optional)</label>
+                <input type="text" name="icon" id="icon" value="{{ form.icon.value|default:'' }}" placeholder="Emoji like 💻 or Lucide name like 'laptop'">
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">Visual identifier for this category.</p>
+            </div>
+
+            <div style="margin-top: 2rem; display: flex; justify-content: flex-end;">
+                <button type="submit" class="btn btn-primary" style="padding: 0.75rem 2rem; font-size: 1.05rem;">
+                    <i data-lucide="plus"></i> Create Category
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

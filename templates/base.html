@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Smart Inventory{% endblock %}</title>
+    
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- App Styles -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i data-lucide="package-search" class="logo-icon"></i>
+                <h1>Smart Inventory</h1>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="{% url 'item_list' %}" class="nav-link {% if request.resolver_match.url_name == 'item_list' %}active{% endif %}">
+                    <i data-lucide="layout-grid"></i> Dashboard
+                </a>
+                <a href="{% url 'item_create' %}" class="nav-link {% if request.resolver_match.url_name == 'item_create' %}active{% endif %}">
+                    <i data-lucide="plus-circle"></i> Add Item
+                </a>
+                <a href="{% url 'category_create' %}" class="nav-link {% if request.resolver_match.url_name == 'category_create' %}active{% endif %}">
+                    <i data-lucide="tags"></i> Add Category
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-header">
+                <div class="search-bar">
+                    <form action="{% url 'item_list' %}" method="get">
+                        <i data-lucide="search"></i>
+                        <input type="text" name="q" placeholder="Search inventory..." value="{{ request.GET.q }}">
+                    </form>
+                </div>
+                <!-- Profile / Settings placeholder -->
+                <div class="header-actions">
+                    <div class="user-profile">
+                        <i data-lucide="user"></i>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-area">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </main>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
